@@ -126,12 +126,13 @@ tools:
 
 init_py = '''"""%(description)s"""
 
-from ppp_core import RequestHandler
-from .router import Router
+from ppp_core import HttpRequestHandler
+from .requesthandler import RequestHandler
 
 def app(environ, start_response):
     """Function called by the WSGI server."""
-    return RequestHandler(environ, start_response, Router).dispatch()
+    return HttpRequestHandler(environ, start_response, RequestHandler) \\
+            .dispatch()
 '''
 
 router_py = '''"""Router of the module."""
