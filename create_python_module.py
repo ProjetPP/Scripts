@@ -126,6 +126,7 @@ tools:
 
 init_py = '''"""%(description)s"""
 
+from ppp_core import RequestHandler
 from .router import Router
 
 def app(environ, start_response):
