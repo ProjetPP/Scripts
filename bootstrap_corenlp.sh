@@ -1,5 +1,7 @@
 #!/bin/bash
 
+python3 -m pip install pexpect unidecode xmltodict --user
+
 if [ ! -f corenlp-python ]
 then
     echo "Cloning Valentin's modified corenlp-python library…"
