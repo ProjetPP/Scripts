@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python3 -m pip install pexpect unidecode xmltodict jsonrpclib xmlrpclib --user
+python3 -m pip install pexpect unidecode xmltodict jsonrpclib-pelix xmlrpclib --user
 
 if [ ! -f corenlp-python ]
 then
