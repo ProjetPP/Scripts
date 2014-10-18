@@ -64,7 +64,7 @@ setup(
     version='0.1',
     description=%(description)r,
     url='https://github.com/ProjetPP',
-    author=%(author)r
+    author=%(author)r,
     author_email='%(email)s',
     license='MIT',
     classifiers=[
@@ -135,11 +135,11 @@ def app(environ, start_response):
             .dispatch()
 '''
 
-router_py = '''"""Router of the module."""
+requesthandler_py = '''"""Request handler of the module."""
 
 from ppp_core.exceptions import ClientError
 
-class Router:
+class RequestHandler:
     def __init__(self, request):
         # TODO: Implement this
         pass
@@ -258,9 +258,9 @@ def make_package(path, replacement):
     path2 = os.path.join(path, '__init__.py')
     with open(path2, 'a') as fd:
         fd.write(init_py % replacement)
-    path2 = os.path.join(path, 'router.py')
+    path2 = os.path.join(path, 'requesthandler.py')
     with open(path2, 'a') as fd:
-        fd.write(router_py % replacement)
+        fd.write(requesthandler_py % replacement)
 
 def show_end_message(replacement):
     msg = ('Great! Your module has been created. Here are a few things you '
@@ -269,7 +269,7 @@ def show_end_message(replacement):
            '* Create a git repository,\n'
            '* Set a better URL in setup.py,\n'
            '* and obviously write your plugin (start in '
-           '%(package_name)s/router.py.\n'
+           '%(package_name)s/requesthandler.py.\n'
            'Have fun!') % replacement
     print()
     print(msg)
