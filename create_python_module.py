@@ -290,7 +290,7 @@ def main():
     for cb in (make_coverage, make_pylint, make_tests,
                make_setup, make_package,
                make_travis, make_scrutinizer,
-               make_license
+               make_license, make_makefile,
               ):
         cb(nice_name, replacement)
     show_end_message(replacement)
