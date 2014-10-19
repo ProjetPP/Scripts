@@ -12,8 +12,9 @@ git clone https://github.com/ProjetPP/ExamplePPPModule-Python.git
 cd ExamplePPPModule-Python
 make localinstall
 
-# Run tests
-make tests
+# You may want to run the tests:
+# pip3 install httmock webtest
+# make tests
 
 cd ..
 
