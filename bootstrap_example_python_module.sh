@@ -1,3 +1,6 @@
+# Get a web server
+pip3 install gunicorn
+
 # Get the core and the datamodel
 pip3 install ppp_core
 
