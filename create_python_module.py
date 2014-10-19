@@ -81,8 +81,8 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     install_requires=[
-        'ppp_datamodel',
-        'ppp_core',
+        'ppp_datamodel>=0.2',
+        'ppp_core>=0.2',
     ],
     packages=[
         '%(package_name)s',
