@@ -2,7 +2,7 @@
 pip3 install gunicorn
 
 # Get the core and the datamodel
-pip3 install ppp_core
+pip3 install ppp_core ppp_datamodel
 
 # Get the module
 git clone https://github.com/ProjetPP/ExamplePPPModule-Python.git
