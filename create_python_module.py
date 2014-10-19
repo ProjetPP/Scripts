@@ -9,8 +9,7 @@ script_chmod = 0o755 # u+rwx, go+rx
 makefile = """
 PYTHON=python3
 
-all:
-	$(PYTHON) setup.py
+all: install
 
 install:
 	$(PYTHON) setup.py install
