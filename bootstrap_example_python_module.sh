@@ -38,4 +38,4 @@ echo "  gunicorn example_ppp_module:app -b 127.0.0.1:8001 # Start the module and
 echo ""
 echo "Then, you can test it from a Python shell:"
 echo ">>> import requests # Import requests, a nice HTTP library"
-echo ">>> requests.post('http://127.0.0.1:8000', data='{\"language\": \"en\", \"tree\": {\"type\": \"triple\", \"subject\": {\"type\": \"resource\", \"value\": \"you\"}, \"object\": {\"type\": \"missing\"}, \"predicate\": {\"type\": \"resource\", \"value\": \"be\"}}}').json() # Make a request to the router"
+echo ">>> requests.post('http://127.0.0.1:8000', data='{\"id\": \"\", \"language\": \"en\", \"tree\": {\"type\": \"triple\", \"subject\": {\"type\": \"resource\", \"value\": \"you\"}, \"object\": {\"type\": \"missing\"}, \"predicate\": {\"type\": \"resource\", \"value\": \"be\"}}}').json() # Make a request to the router"
