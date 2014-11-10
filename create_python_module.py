@@ -80,8 +80,8 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     install_requires=[
-        'ppp_datamodel>=0.2',
-        'ppp_core>=0.2',
+        'ppp_datamodel>=0.5',
+        'ppp_core>=0.5',
     ],
     packages=[
         '%(package_name)s',
