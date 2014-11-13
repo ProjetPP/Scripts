@@ -81,7 +81,7 @@ setup(
     ],
     install_requires=[
         'ppp_datamodel>=0.5',
-        'ppp_core>=0.5',
+        'ppp_libmodule>=0.6',
     ],
     packages=[
         '%(package_name)s',
@@ -125,7 +125,7 @@ tools:
 
 init_py = '''"""%(description)s"""
 
-from ppp_core import HttpRequestHandler
+from ppp_libmodule import HttpRequestHandler
 from .requesthandler import RequestHandler
 
 def app(environ, start_response):
