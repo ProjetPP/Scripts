@@ -5,6 +5,8 @@ import time
 import array
 import datetime
 import requests
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 NB_HOURS = 2
