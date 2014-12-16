@@ -34,11 +34,10 @@ requests_per_minute = array.array('I', (0 for x in range(0, 60*NB_HOURS)))
 for x in data:
     requests_per_minute[(60*NB_HOURS) - x - 1] += 1
 
+
+# Final plot
 x = range(0, 60*NB_HOURS)
-
-
 plt.plot(x, requests_per_minute, label=None)
-#plt.hist(requests_per_minute, bins=20, histtype='stepfilled', normed=True, color='b', label='Gaussian')
 plt.title("Requests per minute")
 plt.xlabel("Time (seconds)")
 plt.ylabel("Requests")
