@@ -38,7 +38,7 @@ for x in data:
 # Final plot
 x = range(0, 60*NB_HOURS)
 plt.plot(x, requests_per_minute, label=None)
-plt.title("Requests per minute")
+plt.title("Requests to the PPP")
 plt.xlabel("Time (minutes)")
 plt.ylabel("Requests")
 plt.legend()
