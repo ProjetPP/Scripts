@@ -39,7 +39,7 @@ for x in data:
 x = range(0, 60*NB_HOURS)
 plt.plot(x, requests_per_minute, label=None)
 plt.title("Requests per minute")
-plt.xlabel("Time (seconds)")
+plt.xlabel("Time (minutes)")
 plt.ylabel("Requests")
 plt.legend()
 plt.savefig(sys.argv[1])
