@@ -40,7 +40,7 @@ for x in data:
 x = range(0, 60*NB_HOURS//GRANULOMETRY)
 plt.plot(x, requests_per_minute, label=None)
 plt.title("Requests to the PPP")
-plt.xlabel("Time (minutes)")
+plt.xlabel("Time (%s minutes)" % str(GRANULOMETRY))
 plt.ylabel("Requests")
 plt.legend()
 plt.savefig(sys.argv[1])
