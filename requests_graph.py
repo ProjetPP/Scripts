@@ -37,7 +37,7 @@ for x in data:
 
 
 # Final plot
-x = range(0, 60*NB_HOURS//GRANULOMETRY)
+x = range(-60*NB_HOURS//GRANULOMETRY, 0)
 plt.plot(x, requests_per_minute, label=None)
 plt.title("Requests to the PPP")
 plt.xlabel("Time (%s minutes)" % str(GRANULOMETRY))
