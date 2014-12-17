@@ -9,7 +9,7 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 
-NB_HOURS = 24
+NB_HOURS = 23
 GRANULOMETRY = 15 # must be a divisor of 60
 
 if len(sys.argv) != 2:
@@ -37,10 +37,10 @@ for x in data:
 
 
 # Final plot
-x = range(-60*NB_HOURS//GRANULOMETRY, 0)
+x = list(map(lambda x:x*GRANULOMETRY, range(-60*NB_HOURS//GRANULOMETRY, 0)))
 plt.plot(x, requests_per_minute, label=None)
 plt.title("Requests to the PPP")
-plt.xlabel("Time (%s minutes)" % str(GRANULOMETRY))
-plt.ylabel("Requests")
+plt.xlabel("Time (minutes)")
+plt.ylabel("Requests (per slice of %d minutes)" % GRANULOMETRY)
 #plt.legend()
 plt.savefig(sys.argv[1])
