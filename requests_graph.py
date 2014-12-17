@@ -39,7 +39,7 @@ for x in data:
 # Final plot
 x = list(map(lambda x:x*GRANULOMETRY, range(-60*NB_HOURS//GRANULOMETRY, 0)))
 plt.plot(x, requests_per_minute, label=None)
-plt.title("Requests to the PPP")
+plt.title("Requests to the PPP in the last %d hours" % NB_HOURS)
 plt.xlabel("Time (minutes)")
 plt.ylabel("Requests (per slice of %d minutes)" % GRANULOMETRY)
 #plt.legend()
