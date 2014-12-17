@@ -10,7 +10,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 NB_HOURS = 23
-GRANULOMETRY = 15 # must be a divisor of 60
+GRANULOMETRY = 10 # must be a divisor of 60
 
 if len(sys.argv) != 2:
     print('Syntax: %s file.png' % sys.argv[0])
