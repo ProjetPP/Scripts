@@ -17,7 +17,7 @@ if len(sys.argv) != 2:
     exit(1)
 
 # Get data
-data = requests.get('http://gunicorn9005.ppp.pony.ovh/', params={'limit': 10000}).json()
+data = requests.get('http://logger.frontend.askplatyp.us/', params={'limit': 10000}).json()
 
 # Convert to datetime
 data = [datetime.datetime(*time.strptime(x[1].split('.')[0], "%Y-%m-%d %H:%M:%S")[:6]) for x in data]
