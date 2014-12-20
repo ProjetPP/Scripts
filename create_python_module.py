@@ -99,7 +99,7 @@ python:
   - pypy3
 
 install:
-    - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_core
+    - pip install scrutinizer-ocular coverage webtest httmock requests ppp_datamodel ppp_libmodule
 
 before_script:
   - ./setup.py install
@@ -136,7 +136,7 @@ def app(environ, start_response):
 
 requesthandler_py = '''"""Request handler of the module."""
 
-from ppp_core.exceptions import ClientError
+from ppp_libmodule.exceptions import ClientError
 
 class RequestHandler:
     def __init__(self, request):
