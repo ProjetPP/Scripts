@@ -3,6 +3,7 @@
 import sys
 import time
 import array
+import argparse
 import datetime
 import requests
 import matplotlib as mpl
@@ -10,12 +11,14 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+# Parse arguments
+parser = argparse.ArgumentParser(
+        description='Plots of graph of requests to the PPP')
+parser.add_argument('outputfile')
+args = parser.parse_args()
+OUTPUT_FILE = args.outputfile
 NB_HOURS = 48
 GRANULOMETRY = 60 # must be a divisor of 60
-
-if len(sys.argv) != 2:
-    print('Syntax: %s file.png' % sys.argv[0])
-    exit(1)
 
 # Initialize matplotlib
 fig, ax = plt.subplots()
@@ -56,4 +59,4 @@ plt.title("Requests to the PPP in the last %d hours" % NB_HOURS)
 plt.xlabel("Time (hours)")
 plt.ylabel("Requests (per slice of %d minutes)" % GRANULOMETRY)
 #plt.legend()
-plt.savefig(sys.argv[1])
+plt.savefig(OUTPUT_FILE)
