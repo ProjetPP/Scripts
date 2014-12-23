@@ -99,7 +99,7 @@ ax.plot(x, requests_per_slice, label=None)
 # Titles
 if INTERVAL < human_to_seconds('6h'):
     plt.title("Requests to the PPP in the last %d hours" % (INTERVAL//3600))
-elif INTERVAL < human_to_seconds('3d'):
+elif INTERVAL < human_to_seconds('8d'):
     plt.title("Requests to the PPP in the last %d days" % (INTERVAL//(24*3600)))
 elif INTERVAL < human_to_seconds('8w'):
     plt.title("Requests to the PPP in the last %d weeks" % (INTERVAL//(7*24*3600)))
