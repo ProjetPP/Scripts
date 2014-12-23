@@ -70,9 +70,7 @@ datemin = datemax - delta
 ax.set_xlim(datemin, datemax)
 
 # Shrink and convert to seconds
-print(repr(data))
 data = [x//GRANULOMETRY for x in data]
-print(repr(len(data)))
 
 # Compute the height of the bars
 requests_per_slice = array.array('I', (0 for x in range(0, INTERVAL//GRANULOMETRY)))
