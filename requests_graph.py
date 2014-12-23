@@ -19,10 +19,13 @@ parser.add_argument('-g', '--granulometry', type=int,
         default=1, help='Number of sections per hour.')
 parser.add_argument('-n', '--nb-hours', type=int,
         default=48, help='Number of sections per hour.')
+parser.add_argument('-t', '--ticks', type=int,
+        default=6, help='Number of hours between two labels.')
 args = parser.parse_args()
 OUTPUT_FILE = args.outputfile
 NB_HOURS = args.nb_hours
 GRANULOMETRY = 60//args.granulometry
+TICKS = args.ticks
 
 # Initialize matplotlib
 fig, ax = plt.subplots()
@@ -49,7 +52,7 @@ for x in data:
     requests_per_minute[(60*NB_HOURS//GRANULOMETRY) - x - 1] += 1
 
 # Units
-hours    = mdates.HourLocator(interval=6) # Show ticks every 6 hour
+hours    = mdates.HourLocator(interval=TICKS) # Show ticks every 6 hour
 hoursFmt = mdates.DateFormatter('%H:00')
 ax.xaxis.set_major_locator(hours)
 ax.xaxis.set_major_formatter(hoursFmt)
