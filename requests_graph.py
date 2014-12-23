@@ -38,11 +38,11 @@ parser = argparse.ArgumentParser(
         description='Plots of graph of requests to the PPP')
 parser.add_argument('outputfile')
 parser.add_argument('-g', '--granulometry', type=str,
-        default='1h', help='Number of sections per hour.')
+        default='1h', help='Length of time slices (e.g. 2h, 3d, 1w).')
 parser.add_argument('-i', '--interval', type=str,
-        default='48h', help='Number of sections per hour.')
+        default='48h', help='Time interval (e.g. 24h, 3d, 1w).')
 parser.add_argument('-t', '--ticks', type=int,
-        default=6, help='Number of hours between two labels.')
+        default=6, help='Space between two labels on the x axis.')
 parser.add_argument('-l', '--logger-url', type=str,
         default='http://logger.frontend.askplatyp.us/',
         help='The URL to the logger.')
