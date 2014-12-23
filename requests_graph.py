@@ -97,8 +97,22 @@ x = list(map(lambda x:datemin + datetime.timedelta(seconds=x*GRANULOMETRY), rang
 ax.plot(x, requests_per_slice, label=None)
 
 # Titles
-plt.title("Requests to the PPP in the last %d seconds" % INTERVAL) # TODO: readability
-plt.xlabel("Time (hours)")
-plt.ylabel("Requests (per slice of %d seconds)" % GRANULOMETRY) # TODO: readability
+if INTERVAL < human_to_seconds('6h'):
+    plt.title("Requests to the PPP in the last %d hours" % (INTERVAL//3600))
+elif INTERVAL < human_to_seconds('3d'):
+    plt.title("Requests to the PPP in the last %d days" % (INTERVAL//(24*3600)))
+elif INTERVAL < human_to_seconds('8w'):
+    plt.title("Requests to the PPP in the last %d hours" % (INTERVAL//(7*24*3600)))
+else:
+    raise ValueError('Too large.')
+plt.xlabel("Time")
+if GRANULOMETRY < human_to_seconds('2h'):
+    plt.ylabel("Requests (per slice of %d minutes)" % (GRANULOMETRY//60))
+elif GRANULOMETRY < human_to_seconds('10h'):
+    plt.ylabel("Requests (per slice of %d hours)" % (GRANULOMETRY//3600))
+elif GRANULOMETRY < human_to_seconds('3d'):
+    plt.ylabel("Requests (per slice of %d )" % (GRANULOMETRY//(24*3600)))
+else:
+    raise ValueError('Too large.')
 #plt.legend()
 plt.savefig(OUTPUT_FILE)
