@@ -15,10 +15,14 @@ import matplotlib.dates as mdates
 parser = argparse.ArgumentParser(
         description='Plots of graph of requests to the PPP')
 parser.add_argument('outputfile')
+parser.add_argument('-g', '--granulometry', type=int,
+        default=1, help='Number of sections per hour.')
+parser.add_argument('-n', '--nb-hours', type=int,
+        default=48, help='Number of sections per hour.')
 args = parser.parse_args()
 OUTPUT_FILE = args.outputfile
-NB_HOURS = 48
-GRANULOMETRY = 60 # must be a divisor of 60
+NB_HOURS = args.nb_hours
+GRANULOMETRY = 60//args.granulometry
 
 # Initialize matplotlib
 fig, ax = plt.subplots()
