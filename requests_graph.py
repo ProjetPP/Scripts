@@ -64,17 +64,21 @@ data = [datetime.datetime(*time.strptime(x[1].split('.')[0], "%Y-%m-%d %H:%M:%S"
 
 # Compute the difference
 datemax = datetime.datetime.now()
-data = [datemax - x for x in data]
+data = [int(datemax.timestamp()) - int(x.timestamp()) for x in data]
 delta = datetime.timedelta(seconds=INTERVAL)
 datemin = datemax - delta
 ax.set_xlim(datemin, datemax)
 
 # Shrink and convert to seconds
-data = [x.seconds//GRANULOMETRY for x in data if x <= delta]
+print(repr(data))
+data = [x//GRANULOMETRY for x in data]
+print(repr(len(data)))
 
 # Compute the height of the bars
 requests_per_slice = array.array('I', (0 for x in range(0, INTERVAL//GRANULOMETRY)))
 for x in data:
+    if x >= INTERVAL//GRANULOMETRY:
+        continue
     requests_per_slice[(INTERVAL//GRANULOMETRY) - x - 1] += 1
 
 # Units
