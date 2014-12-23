@@ -21,17 +21,21 @@ parser.add_argument('-n', '--nb-hours', type=int,
         default=48, help='Number of sections per hour.')
 parser.add_argument('-t', '--ticks', type=int,
         default=6, help='Number of hours between two labels.')
+parser.add_argument('-l', '--logger-url', type=str,
+        default='http://logger.frontend.askplatyp.us/',
+        help='The URL to the logger.')
 args = parser.parse_args()
 OUTPUT_FILE = args.outputfile
 NB_HOURS = args.nb_hours
 GRANULOMETRY = 60//args.granulometry
 TICKS = args.ticks
+LOGGER_URL = args.logger_url
 
 # Initialize matplotlib
 fig, ax = plt.subplots()
 
 # Get data
-data = requests.get('http://logger.frontend.askplatyp.us/', params={'limit': 10000}).json()
+data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
 
 # Convert to datetime
 data = [datetime.datetime(*time.strptime(x[1].split('.')[0], "%Y-%m-%d %H:%M:%S")[:6]) for x in data]
