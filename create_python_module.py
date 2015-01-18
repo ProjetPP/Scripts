@@ -250,6 +250,7 @@ def make_setup(path, replacement):
     path2 = os.path.join(path, 'setup.py')
     with open(path2, 'a') as fd:
         fd.write(setup_py % replacement)
+    os.chmod(path2, script_chmod)
 
 def make_package(path, replacement):
     path = os.path.join(path, replacement['package_name'])
