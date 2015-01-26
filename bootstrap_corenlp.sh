@@ -1,6 +1,13 @@
 #!/bin/bash
 
-python3 -m pip install pexpect unidecode xmltodict jsonrpclib-pelix xmlrpclib --user
+USER_MODE="--user"
+if [ $# -eq 1 ] && [ $1 == "--nouser" ]
+then
+    echo "No user mode."
+    USER_MODE=""
+fi
+
+python3 -m pip install pexpect unidecode xmltodict jsonrpclib-pelix xmlrpclib $USER_MODE
 
 if [ ! -f corenlp-python ]
 then
@@ -9,7 +16,7 @@ then
 fi
 echo "Installing it…"
 cd corenlp-python
-python3 setup.py install --user
+python3 setup.py install $USER_MODE
 cd ..
 if [ ! -f stanford-corenlp-full-2014-08-27.zip ]
 then
