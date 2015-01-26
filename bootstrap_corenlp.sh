@@ -7,7 +7,7 @@ then
     USER_MODE=""
 fi
 
-python3 -m pip install pexpect unidecode xmltodict jsonrpclib-pelix xmlrpclib $USER_MODE
+python3 -m pip install pexpect unidecode xmltodict jsonrpclib-pelix $USER_MODE
 
 if [ ! -f corenlp-python ]
 then
