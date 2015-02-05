@@ -113,7 +113,7 @@ if GRANULOMETRY < human_to_seconds('2h'):
 elif GRANULOMETRY < human_to_seconds('10h'):
     plt.ylabel("Requests (per slice of %d hours)" % (GRANULOMETRY//3600))
 elif GRANULOMETRY < human_to_seconds('8d'):
-    plt.ylabel("Requests (per slice of %d )" % (GRANULOMETRY//(24*3600)))
+    plt.ylabel("Requests (per slice of %d days)" % (GRANULOMETRY//(24*3600)))
 else:
     raise ValueError('Too large.')
 #plt.legend()
