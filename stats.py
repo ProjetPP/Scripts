@@ -1,9 +1,13 @@
+#!/usr/bin/env python3
+
 import requests
 import pickle
 import sys
 
 def printStats(token):
     repoRequest=requests.get('https://api.github.com/orgs/ProjetPP/repos',params={'access_token':token})
+    if repoRequest.status_code != 200:
+        sys.exit('API request failed. Bad token?')
     commitCounts = {}
     totalCommit = 0
     totalRepo = 0
@@ -55,4 +59,7 @@ if __name__ == "__main__":
         sys.exit('The token was not saved with pickle.')
     if not isinstance(token,str):
         sys.exit('The token is not a string.')
-    printStats(token)
+    try:
+        printStats(token)
+    except requests.ConnectionError:
+        sys.exit('API request failed. No internet connection?')
