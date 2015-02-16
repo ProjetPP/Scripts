@@ -269,7 +269,7 @@ def show_end_message(replacement):
            '* Create a git repository,\n'
            '* Set a better URL in setup.py,\n'
            '* and obviously write your plugin (start in '
-           '%(package_name)s/requesthandler.py.\n'
+           '%(package_name)s/requesthandler.py).\n'
            'Have fun!') % replacement
     print()
     print(msg)
