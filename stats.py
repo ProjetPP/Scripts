@@ -31,10 +31,13 @@ def printScore(scoresMap):
     scores = sorted(scoresMap.items(), key = lambda x: -x[1])
     print("\nTotal: %d." % totalEvent)
     for (author, nbEvent) in scores:
-        print("{0}: {1} ({2:.1f}%)".format(author.ljust(20), str(nbEvent).ljust(5), nbEvent/totalEvent*100))
+        print("{0}: {1} ({2:.1f}%)".format(author.ljust(40), str(nbEvent).ljust(5), nbEvent/totalEvent*100))
+
+def underline(string):
+    return("\n%s\n%s" % (string, "-"*len(string)))
 
 def printCommitStats(token):
-    commitCounts = {}
+    commitCount = {}
     for repo in repoRange('https://api.github.com/orgs/ProjetPP/repos', token):
         for repoCommits in requestRange(repo['commits_url'].split('{')[0], token):
             for commit in repoCommits:
@@ -44,10 +47,37 @@ def printCommitStats(token):
                     except (KeyError, TypeError):
                         continue
                     try:
-                        commitCounts[login] += 1
+                        commitCount[login] += 1
                     except KeyError:
-                        commitCounts[login] = 1
-    printScore(commitCounts)
+                        commitCount[login] = 1
+    printScore(commitCount)
+
+def printEventStats(token):
+    eventCount = {}
+    eventTypeCount = {}
+    for repo in repoRange('https://api.github.com/orgs/ProjetPP/repos', token):
+        for repoEvents in requestRange(repo['events_url'], token):
+            for event in repoEvents:
+                try:
+                    typeName = event['type']
+                except (KeyError, TypeError):
+                    continue
+                if typeName == 'PushEvent':
+                    continue
+                try:
+                    eventTypeCount[typeName] += 1
+                except:
+                    eventTypeCount[typeName] = 1
+                try:
+                    login = event['actor']['login']
+                except (KeyError, TypeError):
+                    continue
+                try:
+                    eventCount[login] += 1
+                except:
+                    eventCount[login] = 1
+    printScore(eventTypeCount)
+    printScore(eventCount)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -63,6 +93,11 @@ if __name__ == "__main__":
     if not isinstance(token, str):
         sys.exit('The token is not a string.')
     try:
+        print(underline('Commits'))
         printCommitStats(token)
+        print('')
+        print(underline('Events'))
+        printEventStats(token)
+        print('')
     except requests.ConnectionError:
         sys.exit('API request failed. No internet connection?')
