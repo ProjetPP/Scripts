@@ -30,9 +30,7 @@ def printStats(token):
                         totalCommit+=1
                         try:
                             login = commit['author']['login']
-                        except KeyError:
-                            continue
-                        except TypeError:
+                        except (KeyError, TypeError):
                             continue
                         try:
                             commitCounts[login] += 1
