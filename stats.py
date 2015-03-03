@@ -5,6 +5,9 @@ import pickle
 import sys
 
 def requestRange(url, token):
+    """
+        Iterate over the stuff of the given URL.
+    """
     repoRequest=requests.get(url, params={'access_token':token})
     if repoRequest.status_code == 401:
         sys.exit('API request failed. Bad token?')
@@ -16,6 +19,9 @@ def requestRange(url, token):
         yield repoRequest.json()
 
 def repoRange(url, token):
+    """
+        Iterate over the repositories of the given URL.
+    """
     totalRepo = 0
     for pppRepos in requestRange(url, token):
         totalRepo += len(pppRepos)
@@ -25,6 +31,9 @@ def repoRange(url, token):
     print("\n%d repositories found." % totalRepo)
 
 def printScore(scoresMap):
+    """
+        Print the scores of the given map.
+    """
     totalEvent = 0
     for nbEvent in scoresMap.values():
         totalEvent += nbEvent
@@ -37,6 +46,10 @@ def underline(string):
     return("\n%s\n%s" % (string, "-"*len(string)))
 
 def printCommitStats(token):
+    """
+        Print stats about commits of the ProjetPP.
+        Exclude “merge” and “bump” commits.
+    """
     commitCount = {}
     for repo in repoRange('https://api.github.com/orgs/ProjetPP/repos', token):
         for repoCommits in requestRange(repo['commits_url'].split('{')[0], token):
@@ -53,6 +66,10 @@ def printCommitStats(token):
     printScore(commitCount)
 
 def printEventStats(token):
+    """
+        Print stats about events of the ProjetPP.
+        Exclude “PushEvent” events.
+    """
     eventCount = {}
     eventTypeCount = {}
     for repo in repoRange('https://api.github.com/orgs/ProjetPP/repos', token):
