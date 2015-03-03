@@ -6,8 +6,10 @@ import sys
 
 def requestRange(url, token):
     repoRequest=requests.get(url, params={'access_token':token})
-    if repoRequest.status_code != 200:
+    if repoRequest.status_code == 401:
         sys.exit('API request failed. Bad token?')
+    if repoRequest.status_code != 200:
+        return
     yield repoRequest.json()
     while 'next' in repoRequest.links:
         repoRequest = requests.get(repoRequest.links['next']['url'], params={'access_token':token})
@@ -22,9 +24,8 @@ def printStats(token):
         totalRepo += len(pppRepos)
         for repo in pppRepos:
             print(repo['name'])
-            repoCommits = requests.get(repo['commits_url'].split('{')[0], params={'access_token':token})
-            while(repoCommits.ok):
-                for commit in repoCommits.json():
+            for repoCommits in requestRange(repo['commits_url'].split('{')[0], token):
+                for commit in repoCommits:
                     if 'bump' not in commit['commit']['message'].lower() and 'merge' not in commit['commit']['message'].lower():
                         totalCommit+=1
                         try:
@@ -37,10 +38,6 @@ def printStats(token):
                             commitCounts[login] += 1
                         except KeyError:
                             commitCounts[login] = 1
-                try:
-                    repoCommits = requests.get(repoCommits.links['next']['url'], params={'access_token':token})
-                except KeyError:
-                    break
     print('')
     print("%d repositories found." % totalRepo)
     print("%d commits found." % totalCommit)
