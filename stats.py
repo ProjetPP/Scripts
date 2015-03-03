@@ -15,6 +15,15 @@ def requestRange(url, token):
         repoRequest = requests.get(repoRequest.links['next']['url'], params={'access_token':token})
         yield repoRequest.json()
 
+def repoRange(url, token):
+    totalRepo = 0
+    for pppRepos in requestRange(url, token):
+        totalRepo += len(pppRepos)
+        for repo in pppRepos:
+            print(repo['name'])
+            yield repo
+    print("\n%d repositories found." % totalRepo)
+
 def printScore(scoresMap):
     totalEvent = 0
     for nbEvent in scoresMap.values():
@@ -26,25 +35,18 @@ def printScore(scoresMap):
 
 def printCommitStats(token):
     commitCounts = {}
-    totalCommit = 0
-    totalRepo = 0
-    for pppRepos in requestRange('https://api.github.com/orgs/ProjetPP/repos', token):
-        totalRepo += len(pppRepos)
-        for repo in pppRepos:
-            print(repo['name'])
-            for repoCommits in requestRange(repo['commits_url'].split('{')[0], token):
-                for commit in repoCommits:
-                    if 'bump' not in commit['commit']['message'].lower() and 'merge' not in commit['commit']['message'].lower():
-                        totalCommit+=1
-                        try:
-                            login = commit['author']['login']
-                        except (KeyError, TypeError):
-                            continue
-                        try:
-                            commitCounts[login] += 1
-                        except KeyError:
-                            commitCounts[login] = 1
-    print("\n%d repositories found." % totalRepo)
+    for repo in repoRange('https://api.github.com/orgs/ProjetPP/repos', token):
+        for repoCommits in requestRange(repo['commits_url'].split('{')[0], token):
+            for commit in repoCommits:
+                if 'bump' not in commit['commit']['message'].lower() and 'merge' not in commit['commit']['message'].lower():
+                    try:
+                        login = commit['author']['login']
+                    except (KeyError, TypeError):
+                        continue
+                    try:
+                        commitCounts[login] += 1
+                    except KeyError:
+                        commitCounts[login] = 1
     printScore(commitCounts)
 
 if __name__ == "__main__":
