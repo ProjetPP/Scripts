@@ -22,7 +22,7 @@ def printStats(token):
         totalRepo += len(pppRepos)
         for repo in pppRepos:
             print(repo['name'])
-            repoCommits = requests.get(repo['commits_url'].split('{')[0],params={'access_token':token})
+            repoCommits = requests.get(repo['commits_url'].split('{')[0], params={'access_token':token})
             while(repoCommits.ok):
                 for commit in repoCommits.json():
                     if 'bump' not in commit['commit']['message'].lower() and 'merge' not in commit['commit']['message'].lower():
@@ -38,15 +38,15 @@ def printStats(token):
                         except KeyError:
                             commitCounts[login] = 1
                 try:
-                    repoCommits = requests.get(repoCommits.links['next']['url'],params={'access_token':token})
+                    repoCommits = requests.get(repoCommits.links['next']['url'], params={'access_token':token})
                 except KeyError:
                     break
     print('')
     print("%d repositories found." % totalRepo)
     print("%d commits found." % totalCommit)
-    scores = sorted(commitCounts.items(),key = lambda x: -x[1])
-    for (author,nbCommits) in scores:
-        print("{0}: {1} ({2:.1f}%)".format(author.ljust(20),str(nbCommits).ljust(5),nbCommits/totalCommit*100))
+    scores = sorted(commitCounts.items(), key = lambda x: -x[1])
+    for (author, nbCommits) in scores:
+        print("{0}: {1} ({2:.1f}%)".format(author.ljust(20), str(nbCommits).ljust(5), nbCommits/totalCommit*100))
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -59,7 +59,7 @@ if __name__ == "__main__":
         sys.exit('The file %s does not exist.' % sys.argv[1])
     except pickle.UnpicklingError:
         sys.exit('The token was not saved with pickle.')
-    if not isinstance(token,str):
+    if not isinstance(token, str):
         sys.exit('The token is not a string.')
     try:
         printStats(token)
