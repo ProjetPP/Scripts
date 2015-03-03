@@ -15,8 +15,16 @@ def requestRange(url, token):
         repoRequest = requests.get(repoRequest.links['next']['url'], params={'access_token':token})
         yield repoRequest.json()
 
+def printScore(scoresMap):
+    totalEvent = 0
+    for nbEvent in scoresMap.values():
+        totalEvent += nbEvent
+    scores = sorted(scoresMap.items(), key = lambda x: -x[1])
+    print("\nTotal: %d." % totalEvent)
+    for (author, nbEvent) in scores:
+        print("{0}: {1} ({2:.1f}%)".format(author.ljust(20), str(nbEvent).ljust(5), nbEvent/totalEvent*100))
 
-def printStats(token):
+def printCommitStats(token):
     commitCounts = {}
     totalCommit = 0
     totalRepo = 0
@@ -36,12 +44,8 @@ def printStats(token):
                             commitCounts[login] += 1
                         except KeyError:
                             commitCounts[login] = 1
-    print('')
-    print("%d repositories found." % totalRepo)
-    print("%d commits found." % totalCommit)
-    scores = sorted(commitCounts.items(), key = lambda x: -x[1])
-    for (author, nbCommits) in scores:
-        print("{0}: {1} ({2:.1f}%)".format(author.ljust(20), str(nbCommits).ljust(5), nbCommits/totalCommit*100))
+    print("\n%d repositories found." % totalRepo)
+    printScore(commitCounts)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -57,6 +61,6 @@ if __name__ == "__main__":
     if not isinstance(token, str):
         sys.exit('The token is not a string.')
     try:
-        printStats(token)
+        printCommitStats(token)
     except requests.ConnectionError:
         sys.exit('API request failed. No internet connection?')
