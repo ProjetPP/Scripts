@@ -4,15 +4,21 @@ import requests
 import pickle
 import sys
 
-def printStats(token):
-    repoRequest=requests.get('https://api.github.com/orgs/ProjetPP/repos',params={'access_token':token})
+def requestRange(url, token):
+    repoRequest=requests.get(url, params={'access_token':token})
     if repoRequest.status_code != 200:
         sys.exit('API request failed. Bad token?')
+    yield repoRequest.json()
+    while 'next' in repoRequest.links:
+        repoRequest = requests.get(repoRequest.links['next']['url'], params={'access_token':token})
+        yield repoRequest.json()
+
+
+def printStats(token):
     commitCounts = {}
     totalCommit = 0
     totalRepo = 0
-    while True: # I have a dream that one day "do ... while" statement will exist in python
-        pppRepos = repoRequest.json()
+    for pppRepos in requestRange('https://api.github.com/orgs/ProjetPP/repos', token):
         totalRepo += len(pppRepos)
         for repo in pppRepos:
             print(repo['name'])
@@ -35,10 +41,6 @@ def printStats(token):
                     repoCommits = requests.get(repoCommits.links['next']['url'],params={'access_token':token})
                 except KeyError:
                     break
-        try:
-            repoRequest = requests.get(repoRequest.links['next']['url'], params={'access_token':token})
-        except KeyError:
-            break
     print('')
     print("%d repositories found." % totalRepo)
     print("%d commits found." % totalCommit)
