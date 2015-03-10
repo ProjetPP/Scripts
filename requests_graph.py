@@ -6,6 +6,8 @@ import array
 import argparse
 import datetime
 import requests
+import json
+import os.path
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
@@ -57,7 +59,12 @@ LOGGER_URL = args.logger_url
 fig, ax = plt.subplots()
 
 # Get data
-data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
+if os.path.isfile(LOGGER_URL):
+    file = open(LOGGER_URL, 'r')
+    data = json.load(file)
+    file.close()
+else:
+    data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
 
 # Convert to datetime
 data = [datetime.datetime(*time.strptime(x[1].split('.')[0], "%Y-%m-%d %H:%M:%S")[:6]) for x in data]
@@ -117,4 +124,4 @@ elif GRANULOMETRY < human_to_seconds('8d'):
 else:
     raise ValueError('Too large.')
 #plt.legend()
-plt.savefig(OUTPUT_FILE)
+plt.savefig(OUTPUT_FILE, dpi=300, transparent=True)
