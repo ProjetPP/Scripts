@@ -106,7 +106,8 @@ elif INTERVAL < human_to_seconds('16w'):
     locator = mdates.DayLocator(interval=TICKS)
     fmt = mdates.DateFormatter('%d-%m')
 else:
-    raise ValueError('Too large.')
+    locator = mdates.DayLocator(interval=TICKS)
+    fmt = mdates.DateFormatter('%m-%y')
 ax.xaxis.set_major_locator(locator)
 ax.xaxis.set_major_formatter(fmt)
 
@@ -122,7 +123,7 @@ elif INTERVAL < human_to_seconds('8d'):
 elif INTERVAL < human_to_seconds('16w'):
     plt.title("Requests to the PPP in the last %d weeks" % (INTERVAL//(7*24*3600)))
 else:
-    raise ValueError('Too large.')
+    plt.title("Requests to the PPP in the last %d months" % (INTERVAL//((365.25/12)*24*3600)))
 plt.xlabel("Time")
 if GRANULOMETRY < human_to_seconds('2h'):
     plt.ylabel("Requests (per slice of %d minutes)" % (GRANULOMETRY//60))
