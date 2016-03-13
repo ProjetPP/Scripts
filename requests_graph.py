@@ -48,13 +48,16 @@ parser.add_argument('-t', '--ticks', type=int,
 parser.add_argument('-l', '--logger-url', type=str,
         default='http://logger.frontend.askplatyp.us/',
         help='The URL to the logger.')
+parser.add_argument('-c', '--cache-file-name', type=str,
+        default='requests_cache.json',
+        help='The name of the file used to cache data.')
 args = parser.parse_args()
 OUTPUT_FILE = args.outputfile
 INTERVAL = human_to_seconds(args.interval)
 GRANULOMETRY = human_to_seconds(args.granulometry)
 TICKS = args.ticks
 LOGGER_URL = args.logger_url
-DATA_CACHE_FILENAME = 'requests_cache.json'
+DATA_CACHE_FILENAME = args.cache_file_name
 
 # Initialize matplotlib
 fig, ax = plt.subplots()

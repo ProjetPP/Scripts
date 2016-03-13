@@ -1,3 +1,4 @@
 *pickle
 *.png
-requests_cache.json
+*~
+*.json
