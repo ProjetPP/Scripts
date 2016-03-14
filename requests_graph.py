@@ -48,12 +48,16 @@ parser.add_argument('-t', '--ticks', type=int,
 parser.add_argument('-l', '--logger-url', type=str,
         default='http://logger.frontend.askplatyp.us/',
         help='The URL to the logger.')
+parser.add_argument('-c', '--cache-file-name', type=str,
+        default='requests_cache.json',
+        help='The name of the file used to cache data.')
 args = parser.parse_args()
 OUTPUT_FILE = args.outputfile
 INTERVAL = human_to_seconds(args.interval)
 GRANULOMETRY = human_to_seconds(args.granulometry)
 TICKS = args.ticks
 LOGGER_URL = args.logger_url
+DATA_CACHE_FILENAME = args.cache_file_name
 
 # Initialize matplotlib
 fig, ax = plt.subplots()
@@ -64,7 +68,15 @@ if os.path.isfile(LOGGER_URL):
     data = json.load(file)
     file.close()
 else:
-    data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
+    try:
+        with open(DATA_CACHE_FILENAME) as data_cache:
+            data = json.load(data_cache)
+            print('Loaded the data from cache.')
+    except FileNotFoundError:
+        data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
+        print('Downloaded the data.')
+        with open(DATA_CACHE_FILENAME, 'w') as data_cache:
+            json.dump(data, data_cache)
 
 # Convert to datetime
 data = [datetime.datetime(*time.strptime(x[1].split('.')[0], "%Y-%m-%d %H:%M:%S")[:6]) for x in data]
@@ -97,7 +109,8 @@ elif INTERVAL < human_to_seconds('16w'):
     locator = mdates.DayLocator(interval=TICKS)
     fmt = mdates.DateFormatter('%d-%m')
 else:
-    raise ValueError('Too large.')
+    locator = mdates.DayLocator(interval=TICKS)
+    fmt = mdates.DateFormatter('%m-%y')
 ax.xaxis.set_major_locator(locator)
 ax.xaxis.set_major_formatter(fmt)
 
@@ -113,15 +126,14 @@ elif INTERVAL < human_to_seconds('8d'):
 elif INTERVAL < human_to_seconds('16w'):
     plt.title("Requests to the PPP in the last %d weeks" % (INTERVAL//(7*24*3600)))
 else:
-    raise ValueError('Too large.')
+    plt.title("Requests to the PPP in the last %d months" % (INTERVAL//((365.25/12)*24*3600)))
 plt.xlabel("Time")
 if GRANULOMETRY < human_to_seconds('2h'):
     plt.ylabel("Requests (per slice of %d minutes)" % (GRANULOMETRY//60))
 elif GRANULOMETRY < human_to_seconds('10h'):
     plt.ylabel("Requests (per slice of %d hours)" % (GRANULOMETRY//3600))
-elif GRANULOMETRY < human_to_seconds('8d'):
-    plt.ylabel("Requests (per slice of %d days)" % (GRANULOMETRY//(24*3600)))
 else:
-    raise ValueError('Too large.')
+    plt.ylabel("Requests (per slice of %d days)" % (GRANULOMETRY//(24*3600)))
+
 #plt.legend()
 plt.savefig(OUTPUT_FILE, dpi=300, transparent=True)
