@@ -132,9 +132,8 @@ if GRANULOMETRY < human_to_seconds('2h'):
     plt.ylabel("Requests (per slice of %d minutes)" % (GRANULOMETRY//60))
 elif GRANULOMETRY < human_to_seconds('10h'):
     plt.ylabel("Requests (per slice of %d hours)" % (GRANULOMETRY//3600))
-elif GRANULOMETRY < human_to_seconds('8d'):
-    plt.ylabel("Requests (per slice of %d days)" % (GRANULOMETRY//(24*3600)))
 else:
-    raise ValueError('Too large.')
+    plt.ylabel("Requests (per slice of %d days)" % (GRANULOMETRY//(24*3600)))
+
 #plt.legend()
 plt.savefig(OUTPUT_FILE, dpi=300, transparent=True)
