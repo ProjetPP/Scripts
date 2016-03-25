@@ -7,25 +7,32 @@ then
     USER_MODE=""
 fi
 
-python3 -m pip install pexpect unidecode xmltodict jsonrpclib-pelix $USER_MODE
-
-if [ ! -f corenlp-python ]
+if [ ! -d CoreNLP ]
 then
-    echo "Cloning Valentin's modified corenlp-python library…"
-    git clone https://bitbucket.org/ProgVal/corenlp-python.git
+    echo "Cloning and installing CoreNLP…"
+    git clone git@github.com:stanfordnlp/CoreNLP.git
+    cd CoreNLP
+    ant compile
+    ant jar
+    cd ..
 fi
-echo "Installing it…"
-cd corenlp-python
-python3 setup.py install $USER_MODE
-cd ..
-if [ ! -f stanford-corenlp-full-2015-01-29.zip ]
+if ! ls stanford-english-corenlp-*models.jar 1> /dev/null 2>&1
 then
-    echo "Downloading CoreNLP (long: 221MB)…"
-    wget http://nlp.stanford.edu/software/stanford-corenlp-full-2015-01-29.zip
+    echo "Downloading English model for CoreNLP…"
+    wget http://nlp.stanford.edu/software/stanford-english-corenlp-2016-01-10-models.jar
 fi
-echo "Extracting CoreNLP…"
-rm -rf stanford-corenlp-full-2015-01-29
-unzip stanford-corenlp-full-2015-01-29.zip
+yes | cp -l stanford-english-corenlp-*models.jar CoreNLP
 echo "All seemed to work. Hold tight while we test it on a simple example (might take some time)."
-CORENLP=stanford-corenlp-full-2015-01-30 python3 -c "print(repr(__import__('corenlp').StanfordCoreNLP().raw_parse('This is a sentence.')))"
-
+cd CoreNLP
+export CLASSPATH="`find . -name '*.jar'`"
+java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer &
+SERVER_PID=$!
+sleep 1 # Let the server some time to start...
+wget --post-data 'the quick brown fox jumped over the lazy dog' 'localhost:9000/?properties={"annotators": "tokenize,ssplit,pos", "outputFormat": "json"}' -O -
+if [ $? -ne 0 ]
+then
+    echo "Something does not work…"
+else
+    echo "All seemed to work!"
+fi
+kill $SERVER_PID
