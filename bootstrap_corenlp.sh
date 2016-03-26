@@ -10,7 +10,7 @@ fi
 if [ ! -d CoreNLP ]
 then
     echo "Cloning and installing CoreNLP…"
-    git clone git@github.com:stanfordnlp/CoreNLP.git
+    git clone https://github.com/stanfordnlp/CoreNLP.git
     cd CoreNLP
     ant compile
     ant jar
