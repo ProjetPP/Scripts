@@ -49,7 +49,7 @@ parser.add_argument('-l', '--logger-url', type=str,
         default='http://logger.frontend.askplatyp.us/',
         help='The URL to the logger.')
 parser.add_argument('-c', '--cache-file-name', type=str,
-        default='requests_cache.json',
+        default=None,
         help='The name of the file used to cache data.')
 args = parser.parse_args()
 OUTPUT_FILE = args.outputfile
@@ -63,15 +63,16 @@ DATA_CACHE_FILENAME = args.cache_file_name
 fig, ax = plt.subplots()
 
 # Get data
-try:
+if DATA_CACHE_FILENAME is not None and os.path.isfile(DATA_CACHE_FILENAME):
     with open(DATA_CACHE_FILENAME) as data_cache:
         data = json.load(data_cache)
         print('Loaded the data from cache.')
-except FileNotFoundError:
+else:
     data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
     print('Downloaded the data.')
-    with open(DATA_CACHE_FILENAME, 'w') as data_cache:
-        json.dump(data, data_cache)
+    if DATA_CACHE_FILENAME is not None:
+        with open(DATA_CACHE_FILENAME, 'w') as data_cache:
+            json.dump(data, data_cache)
 
 # Convert to datetime
 data = [datetime.datetime(*time.strptime(x[1].split('.')[0], "%Y-%m-%d %H:%M:%S")[:6]) for x in data]
