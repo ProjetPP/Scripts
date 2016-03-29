@@ -63,20 +63,15 @@ DATA_CACHE_FILENAME = args.cache_file_name
 fig, ax = plt.subplots()
 
 # Get data
-if os.path.isfile(LOGGER_URL):
-    file = open(LOGGER_URL, 'r')
-    data = json.load(file)
-    file.close()
-else:
-    try:
-        with open(DATA_CACHE_FILENAME) as data_cache:
-            data = json.load(data_cache)
-            print('Loaded the data from cache.')
-    except FileNotFoundError:
-        data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
-        print('Downloaded the data.')
-        with open(DATA_CACHE_FILENAME, 'w') as data_cache:
-            json.dump(data, data_cache)
+try:
+    with open(DATA_CACHE_FILENAME) as data_cache:
+        data = json.load(data_cache)
+        print('Loaded the data from cache.')
+except FileNotFoundError:
+    data = requests.get(LOGGER_URL, params={'limit': 10000}).json()
+    print('Downloaded the data.')
+    with open(DATA_CACHE_FILENAME, 'w') as data_cache:
+        json.dump(data, data_cache)
 
 # Convert to datetime
 data = [datetime.datetime(*time.strptime(x[1].split('.')[0], "%Y-%m-%d %H:%M:%S")[:6]) for x in data]
